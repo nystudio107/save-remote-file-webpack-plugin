@@ -8,8 +8,8 @@ var download = require('download-to-file');
 var path = require('path');
 
 module.exports = function () {
-    function DownloadFilePlugin(options) {
-        _classCallCheck(this, DownloadFilePlugin);
+    function SaveRemoteFilePlugin(options) {
+        _classCallCheck(this, SaveRemoteFilePlugin);
 
         if (options instanceof Array) {
             this.options = options;
@@ -18,13 +18,13 @@ module.exports = function () {
         }
     }
 
-    _createClass(DownloadFilePlugin, [{
+    _createClass(SaveRemoteFilePlugin, [{
         key: 'apply',
         value: function apply(compiler) {
             var _this = this;
 
             compiler.hooks.beforeRun.tapAsync({
-                name: 'DownloadFilePlugin',
+                name: 'SaveRemoteFilePlugin',
                 context: true
             }, function (context, compilation, callback) {
                 var downloadFiles = function downloadFiles(option) {
@@ -35,7 +35,7 @@ module.exports = function () {
                             compilation.errors.push(new Error(err));
                         } else {
                             if (reportProgress) {
-                                reportProgress(100.0, 'Download finished: ', filepath);
+                                reportProgress(100.0, 'Remote files saved to: ', filepath);
                             }
                         }
                     });
@@ -46,5 +46,5 @@ module.exports = function () {
         }
     }]);
 
-    return DownloadFilePlugin;
+    return SaveRemoteFilePlugin;
 }();
