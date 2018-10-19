@@ -1,7 +1,7 @@
 const download = require('download-to-file')
 const path = require('path');
 
-module.exports = class DownloadFilePlugin {
+module.exports = class SaveRemoteFilePlugin {
     constructor(options) {
         if (options instanceof Array) {
             this.options = options;
@@ -13,7 +13,7 @@ module.exports = class DownloadFilePlugin {
     apply(compiler) {
         compiler.hooks.beforeRun.tapAsync(
             {
-                name: 'DownloadFilePlugin',
+                name: 'SaveRemoteFilePlugin',
                 context: true
             },
             (context, compilation, callback) => {
@@ -25,7 +25,7 @@ module.exports = class DownloadFilePlugin {
                             compilation.errors.push(new Error(err));
                         } else {
                             if (reportProgress) {
-                                reportProgress(100.0, 'Download finished: ', filepath);
+                                reportProgress(100.0, 'Remote files saved to: ', filepath);
                             }
                         }
                     });
