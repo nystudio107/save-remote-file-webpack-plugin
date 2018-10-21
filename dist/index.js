@@ -4,7 +4,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var download = require('download-to-file');
+var crypto = require('crypto');
+var download = require('download');
 var path = require('path');
 
 module.exports = function () {
@@ -19,29 +20,49 @@ module.exports = function () {
     }
 
     _createClass(SaveRemoteFilePlugin, [{
+        key: 'appendHashToPath',
+        value: function appendHashToPath(path, hash) {
+            var newPath = path.substring(0, path.lastIndexOf('.')) + '.' + hash + path.substring(path.lastIndexOf('.'));
+
+            return newPath;
+        }
+    }, {
         key: 'apply',
         value: function apply(compiler) {
             var _this = this;
 
-            compiler.hooks.beforeRun.tapAsync({
+            compiler.hooks.emit.tapAsync({
                 name: 'SaveRemoteFilePlugin',
                 context: true
             }, function (context, compilation, callback) {
+                var count = _this.options.length;
                 var downloadFiles = function downloadFiles(option) {
                     var reportProgress = context && context.reportProgress;
-                    var filepath = path.join(compiler.options.output.path, option.filepath);
-                    download(option.url, filepath, function (err, filepath) {
-                        if (err) {
-                            compilation.errors.push(new Error(err));
-                        } else {
-                            if (reportProgress) {
-                                reportProgress(100.0, 'Remote files saved to: ', filepath);
+                    download(option.url).then(function (data) {
+                        var hash = crypto.createHash('md5').update(data).digest("hex");
+                        var newPath = _this.appendHashToPath(option.filepath, hash);
+                        compilation.assets[newPath] = {
+                            size: function size() {
+                                return data.length;
+                            },
+                            source: function source() {
+                                return data;
                             }
+                        };
+                        if (reportProgress) {
+                            reportProgress(95.0, 'Remote file downloaded: ', newPath);
                         }
+                        // Issue the calback after all files have been processed
+                        count--;
+                        if (count === 0) {
+                            callback();
+                        }
+                    }).catch(function (error) {
+                        compilation.errors.push(new Error(error));
+                        callback();
                     });
                 };
                 _this.options.forEach(downloadFiles);
-                callback();
             });
         }
     }]);

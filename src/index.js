@@ -1,4 +1,5 @@
-const download = require('download-to-file')
+const crypto = require('crypto');
+const download = require('download');
 const path = require('path');
 
 module.exports = class SaveRemoteFilePlugin {
@@ -10,28 +11,46 @@ module.exports = class SaveRemoteFilePlugin {
         }
     }
 
+    appendHashToPath(path, hash) {
+        const newPath = path.substring(0, path.lastIndexOf('.'))
+            + '.'
+            + hash
+            + path.substring(path.lastIndexOf('.'));
+
+        return newPath;
+    }
+
     apply(compiler) {
-        compiler.hooks.beforeRun.tapAsync(
+        compiler.hooks.emit.tapAsync(
             {
                 name: 'SaveRemoteFilePlugin',
                 context: true
             },
             (context, compilation, callback) => {
+                let count = this.options.length;
                 const downloadFiles = (option) => {
                     const reportProgress = context && context.reportProgress;
-                    const filepath = path.join(compiler.options.output.path, option.filepath);
-                    download(option.url, filepath, (err, filepath) => {
-                        if (err) {
-                            compilation.errors.push(new Error(err));
-                        } else {
-                            if (reportProgress) {
-                                reportProgress(100.0, 'Remote files saved to: ', filepath);
-                            }
+                    download(option.url).then(data => {
+                        const hash = crypto.createHash('md5').update(data).digest("hex");
+                        const newPath = this.appendHashToPath(option.filepath, hash);
+                        compilation.assets[newPath] = {
+                            size: () => data.length,
+                            source: () => data
                         }
+                        if (reportProgress) {
+                            reportProgress(95.0, 'Remote file downloaded: ', newPath);
+                        }
+                        // Issue the calback after all files have been processed
+                        count--;
+                        if (count === 0) {
+                            callback();
+                        }
+                    }).catch(error => {
+                        compilation.errors.push(new Error(error));
+                        callback();
                     });
                 };
                 this.options.forEach(downloadFiles);
-                callback();
             });
     }
 };
