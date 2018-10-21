@@ -6,7 +6,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var crypto = require('crypto');
 var download = require('download');
-var path = require('path');
 
 module.exports = function () {
     function SaveRemoteFilePlugin(options) {
