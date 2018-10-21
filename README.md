@@ -1,8 +1,22 @@
+# SaveRemoteFile webpack plugin
+
+## Installing
+
+```
+yarn add save-remote-file-webpack-plugin --dev
+```
+or
+```
+npm install save-remote-file-webpack-plugin --save-dev
+```
+
 ## How it works
 
 webpack 4 plugin to download & save remote files locally
 
 It was written to allow for the downloading of [https://google-analytics.com/analytics.js](https://google-analytics.com/analytics.js) so that it can be served locally, but it can be used to locally download any remote file as part of the webpack build process.
+
+The resulting file has a content hash appended to the file name after it is downloaded, and is added to your `manifest.json` if you are using `manifest-webpack-plugin`
 
 ## Usage
 
