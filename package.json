@@ -1,10 +1,10 @@
 {
   "name": "save-remote-file-webpack-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "webpack 4 plugin to download & save remote files locally",
   "main": "dist/index.js",
   "dependencies": {
-    "download-to-file": "^2.1.0"
+    "download": "^7.1.0"
   },
   "homepage": "https://github.com/nystudio107/save-remote-file-webpack-plugin",
   "repository": {
