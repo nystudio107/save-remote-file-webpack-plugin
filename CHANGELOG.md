@@ -1,4 +1,8 @@
-# SaveRemoteFile webpack plugin Changelog
+# SaveRemoteFilePlugin webpack plugin Changelog
+
+## 1.0.2 - 2018-10-22
+### Changed
+* Code and docs cleanup
 
 ## 1.0.1 - 2018-10-21
 ### Added
