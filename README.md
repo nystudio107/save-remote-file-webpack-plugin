@@ -1,4 +1,4 @@
-# SaveRemoteFile webpack plugin
+# SaveRemoteFilePlugin webpack plugin
 
 ## Installing
 
@@ -26,19 +26,23 @@ module.exports = {
     plugins: [
         new SaveRemoteFilePlugin([
             {
-                url: 'http://example.com/some/file.txt',
-                filepath: 'local.txt',
+                url: 'https://google-analytics.com/analytics.js',
+                filepath: 'js/analytics.js',
             },
         ])
     ]
 }
 ```
 
-The `filepath` is relative to your webpack `output.path`
+This would emit `js/analytics.45eff9ff7d6c7c1e3c3d4184fdbbed90.js` and in your `manifest.json` something like this:
 
-You can pass in either an object, or an array of objects.
+```json
+  "js/analytics.js": "/dist/js/analytics.45eff9ff7d6c7c1e3c3d4184fdbbed90.js"
+```
 
 ## Options
+
+You can pass in either an object, or an array of objects for downloading multiple files.
 
 * **url** remote URL of the remote file to save locally
 * **filepath** filename where the file will be saved, relative to your webpack `output.path`

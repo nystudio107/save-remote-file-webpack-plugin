@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 const download = require('download');
-const path = require('path');
 
 module.exports = class SaveRemoteFilePlugin {
     constructor(options) {
@@ -36,7 +35,7 @@ module.exports = class SaveRemoteFilePlugin {
                         compilation.assets[newPath] = {
                             size: () => data.length,
                             source: () => data
-                        }
+                        };
                         if (reportProgress) {
                             reportProgress(95.0, 'Remote file downloaded: ', newPath);
                         }
