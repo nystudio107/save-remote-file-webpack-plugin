@@ -1,5 +1,9 @@
 # SaveRemoteFilePlugin webpack plugin Changelog
 
+## 1.1.0 - 2020-03-29
+### Added
+* Added 'hash' option to specify whether the plugin adds content hashes to output filenames.
+
 ## 1.0.2 - 2018-10-22
 ### Changed
 * Code and docs cleanup

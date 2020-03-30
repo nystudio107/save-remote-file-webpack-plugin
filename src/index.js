@@ -31,7 +31,7 @@ module.exports = class SaveRemoteFilePlugin {
                     const reportProgress = context && context.reportProgress;
                     download(option.url).then(data => {
                         const hash = crypto.createHash('md5').update(data).digest("hex");
-                        const newPath = this.appendHashToPath(option.filepath, hash);
+                        const newPath = (option.hash === false) ? option.filepath : this.appendHashToPath(option.filepath, hash);
                         compilation.assets[newPath] = {
                             size: () => data.length,
                             source: () => data

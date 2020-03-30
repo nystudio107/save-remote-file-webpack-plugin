@@ -44,5 +44,6 @@ This would emit `js/analytics.45eff9ff7d6c7c1e3c3d4184fdbbed90.js` and in your `
 
 You can pass in either an object, or an array of objects for downloading multiple files.
 
-* **url** remote URL of the remote file to save locally
-* **filepath** filename where the file will be saved, relative to your webpack `output.path`
+* **url** - remote URL of the remote file to save locally
+* **filepath** - filename where the file will be saved, relative to your webpack `output.path`
+* **hash** - [boolean] whether to add a content hash to the output filename. (default: `true`)
