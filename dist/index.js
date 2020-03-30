@@ -39,7 +39,7 @@ module.exports = function () {
                     var reportProgress = context && context.reportProgress;
                     download(option.url).then(function (data) {
                         var hash = crypto.createHash('md5').update(data).digest("hex");
-                        var newPath = _this.appendHashToPath(option.filepath, hash);
+                        var newPath = option.hash === false ? option.filepath : _this.appendHashToPath(option.filepath, hash);
                         compilation.assets[newPath] = {
                             size: function size() {
                                 return data.length;
